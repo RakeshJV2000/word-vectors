@@ -1,5 +1,5 @@
 from distributional import co_occurrence_matrix_3, vocab_v_dict
-from tdf import co_occurrence_matrix, vocab_v_dict
+from idf import co_occurrence_matrix, vocab_v_dict
 import numpy as np
 from numpy.linalg import norm
 from scipy.stats import spearmanr

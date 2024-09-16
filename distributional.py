@@ -1,9 +1,19 @@
+def remove_duplicates_preserve_order(word_list):
+    seen = set()
+    unique_list = []
+    for word in word_list:
+        if word not in seen:
+            unique_list.append(word)
+            seen.add(word)
+    return unique_list
+
 with open('data/cleaned_vocab-15kws.txt', 'r') as file:
     v_list = [line.strip() for line in file.readlines()]
-
+    v_list = remove_duplicates_preserve_order(v_list)
 
 with open('data/cleaned_vocab-5k.txt', 'r') as file:
     vc_list = [line.strip() for line in file.readlines()]
+    vc_list = remove_duplicates_preserve_order(vc_list)
 
 # Create dictionaries that map words to their indices
 vocab_v_dict = {word: idx for idx, word in enumerate(v_list)}
@@ -62,3 +72,29 @@ def update_co_occurrence_matrix(corpus_file, vocab_v_dict, vocab_vc_dict, co_occ
 corpus_file = 'data/cleaned_wiki-1percent.txt'
 update_co_occurrence_matrix(corpus_file, vocab_v_dict, vocab_vc_dict, co_occurrence_matrix_3, window_size=3)
 update_co_occurrence_matrix(corpus_file, vocab_v_dict, vocab_vc_dict, co_occurrence_matrix_6, window_size=6)
+
+print("word pair\t\tw=3\tw=6")
+print("(chicken, the)\t\t",
+      co_occurrence_matrix_3[vocab_v_dict['chicken']][vocab_vc_dict['the']], "\t",
+      co_occurrence_matrix_6[vocab_v_dict['chicken']][vocab_vc_dict['the']]
+      )
+print("(chicken, wings)\t",
+      co_occurrence_matrix_3[vocab_v_dict['chicken']][vocab_vc_dict['wings']], "\t",
+      co_occurrence_matrix_6[vocab_v_dict['chicken']][vocab_vc_dict['wings']]
+      )
+print("(chicago, chicago)\t",
+      co_occurrence_matrix_3[vocab_v_dict['chicago']][vocab_vc_dict['chicago']], "\t",
+      co_occurrence_matrix_6[vocab_v_dict['chicago']][vocab_vc_dict['chicago']]
+      )
+print("(coffee, the)\t\t",
+      co_occurrence_matrix_3[vocab_v_dict['coffee']][vocab_vc_dict['the']], "\t",
+      co_occurrence_matrix_6[vocab_v_dict['coffee']][vocab_vc_dict['the']]
+      )
+print("(coffee, cup)\t\t",
+      co_occurrence_matrix_3[vocab_v_dict['coffee']][vocab_vc_dict['cup']], "\t",
+      co_occurrence_matrix_6[vocab_v_dict['coffee']][vocab_vc_dict['cup']]
+      )
+print("(coffee, coffee)\t",
+      co_occurrence_matrix_3[vocab_v_dict['coffee']][vocab_vc_dict['coffee']], "\t",
+      co_occurrence_matrix_6[vocab_v_dict['coffee']][vocab_vc_dict['coffee']]
+      )

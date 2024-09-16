@@ -36,7 +36,7 @@ def compute_idf_factor(corpus_file, vocab_vc_dict):
 
     return idf_factors, total_sentences
 
-def idf(corpus_file, vocab_v_dict, vocab_vc_dict, co_occurrence_matrix, window_size=2):
+def idf(corpus_file, vocab_v_dict, vocab_vc_dict, co_occurrence_matrix, window_size=3):
     """
     Updates the co-occurrence matrix using the TDF formula.
 
@@ -66,7 +66,7 @@ def idf(corpus_file, vocab_v_dict, vocab_vc_dict, co_occurrence_matrix, window_s
 
                 # If word is in vocab_v_dict (V)
                 if x_idx is not None:
-                    # Define the window range (max 2 words on either side)
+                    # Define the window range
                     left_window = max(0, i - window_size)
                     right_window = min(len(words), i + window_size + 1)
 
@@ -84,5 +84,5 @@ def idf(corpus_file, vocab_v_dict, vocab_vc_dict, co_occurrence_matrix, window_s
                                 co_occurrence_matrix[x_idx][y_idx] += 1 * idf_factors[context_word]
 
 
-# Update the co-occurrence matrix using TDF
-idf(corpus_file, vocab_v_dict, vocab_vc_dict, co_occurrence_matrix)
+# Update the co-occurrence matrix using IDF
+idf(corpus_file, vocab_v_dict, vocab_vc_dict, co_occurrence_matrix, 3)

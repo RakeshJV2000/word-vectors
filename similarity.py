@@ -21,7 +21,7 @@ def cosine_similarity(vec1, vec2):
         return 0.0
     return np.dot(vec1, vec2) / (norm(vec1) * norm(vec2))
 
-def evaluate_men_similarity(men_file, vocab_v_dict, word_vectors):
+def evaluate_similarity(files, vocab_v_dict, word_vectors):
     """
     Evaluates word similarity on the MEN dataset using generated word vectors.
 
@@ -38,7 +38,7 @@ def evaluate_men_similarity(men_file, vocab_v_dict, word_vectors):
     human_scores = []
     model_scores = []
 
-    with open(men_file, 'r') as file:
+    with open(files, 'r') as file:
         for line in file:
             # Split the line by tabs (TSV format)
             word1, word2, human_score = line.strip().split('\t')
@@ -70,8 +70,8 @@ def evaluate_men_similarity(men_file, vocab_v_dict, word_vectors):
 
 
 print("Distributional Counting - Window size(w): 3")
-evaluate_men_similarity(men_file, vocab_v_dict, co_occurrence_matrix_3)
-evaluate_men_similarity(sim_file, vocab_v_dict, co_occurrence_matrix_3)
-print("Distributional Counting - Window size(w): 3")
-evaluate_men_similarity(men_file, vocab_v_dict, co_occurrence_matrix_6)
-evaluate_men_similarity(sim_file, vocab_v_dict, co_occurrence_matrix_6)
+evaluate_similarity(men_file, vocab_v_dict, co_occurrence_matrix_3)
+evaluate_similarity(sim_file, vocab_v_dict, co_occurrence_matrix_3)
+print("Distributional Counting - Window size(w): 6")
+evaluate_similarity(men_file, vocab_v_dict, co_occurrence_matrix_6)
+evaluate_similarity(sim_file, vocab_v_dict, co_occurrence_matrix_6)

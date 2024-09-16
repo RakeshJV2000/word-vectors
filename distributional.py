@@ -41,7 +41,7 @@ def update_co_occurrence_matrix(corpus_file, vocab_v_dict, vocab_vc_dict, co_occ
 
                 # If word is in vocab_v_dict (V)
                 if x_idx is not None:
-                    # Define the window range (max 2 words on either side)
+                    # Define the window range
                     left_window = max(0, i - window_size)
                     right_window = min(len(words), i + window_size + 1)
 

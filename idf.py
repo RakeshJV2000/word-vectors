@@ -1,7 +1,7 @@
 from distributional import co_occurrence_matrix_3, vocab_v_dict, vocab_vc_dict
 from collections import defaultdict
 
-corpus_file = 'data/cleaned_wiki-1percent.txt'
+corpus_file = 'data/wiki-1percent.txt'
 co_occurrence_matrix = [[0] * len(vocab_vc_dict) for _ in range(len(vocab_v_dict))]
 
 def compute_idf_factor(corpus_file, vocab_vc_dict):
@@ -38,7 +38,7 @@ def compute_idf_factor(corpus_file, vocab_vc_dict):
 
 def idf(corpus_file, vocab_v_dict, vocab_vc_dict, co_occurrence_matrix, window_size=3):
     """
-    Updates the co-occurrence matrix using the TDF formula.
+    Updates the co-occurrence matrix using the IDF formula.
 
     Args:
     corpus_file (str): Path to the wiki-1percent.txt corpus file.

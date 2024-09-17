@@ -7,11 +7,11 @@ def remove_duplicates_preserve_order(word_list):
             seen.add(word)
     return unique_list
 
-with open('data/cleaned_vocab-15kws.txt', 'r') as file:
+with open('data/vocab-15kws.txt', 'r') as file:
     v_list = [line.strip() for line in file.readlines()]
     v_list = remove_duplicates_preserve_order(v_list)
 
-with open('data/cleaned_vocab-5k.txt', 'r') as file:
+with open('data/vocab-5k.txt', 'r') as file:
     vc_list = [line.strip() for line in file.readlines()]
     vc_list = remove_duplicates_preserve_order(vc_list)
 
@@ -69,7 +69,7 @@ def update_co_occurrence_matrix(corpus_file, vocab_v_dict, vocab_vc_dict, co_occ
                                 co_occurrence_matrix[x_idx][y_idx] += 1
 
 
-corpus_file = 'data/cleaned_wiki-1percent.txt'
+corpus_file = 'data/wiki-1percent.txt'
 update_co_occurrence_matrix(corpus_file, vocab_v_dict, vocab_vc_dict, co_occurrence_matrix_3, window_size=3)
 update_co_occurrence_matrix(corpus_file, vocab_v_dict, vocab_vc_dict, co_occurrence_matrix_6, window_size=6)
 

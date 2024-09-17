@@ -1,5 +1,6 @@
 from distributional import co_occurrence_matrix_3, vocab_v_dict
 from idf import co_occurrence_matrix, vocab_v_dict
+from pmi import pmi_matrix
 import numpy as np
 from numpy.linalg import norm
 from scipy.stats import spearmanr
@@ -81,3 +82,9 @@ print("Men file :")
 EvalWS(men_file, vocab_v_dict, co_occurrence_matrix)
 print("Sim file :")
 EvalWS(sim_file, vocab_v_dict, co_occurrence_matrix)
+
+print("Pointwise Mutual Information - Window size(w): 3")
+print("Men file :")
+EvalWS(men_file, vocab_v_dict, pmi_matrix)
+print("Sim file :")
+EvalWS(sim_file, vocab_v_dict, pmi_matrix)

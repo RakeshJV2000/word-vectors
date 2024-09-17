@@ -1,5 +1,5 @@
 from distributional import co_occurrence_matrix_3, vocab_v_dict
-from idf import co_occurrence_matrix, vocab_v_dict
+from idf import co_occurrence_matrix
 from pmi import pmi_matrix
 import numpy as np
 from numpy.linalg import norm
@@ -9,44 +9,19 @@ men_file = 'data/men.txt'
 sim_file = "data/simlex-999.txt"
 
 def cosine_similarity(vec1, vec2):
-    """
-    Computes the cosine similarity between two vectors.
-
-    Args:
-    vec1 (numpy array): First word vector.
-    vec2 (numpy array): Second word vector.
-
-    Returns:
-    float: The cosine similarity between vec1 and vec2.
-    """
     if norm(vec1) == 0 or norm(vec2) == 0:
         return 0.0
     return np.dot(vec1, vec2) / (norm(vec1) * norm(vec2))
 
 def EvalWS(files, vocab_v_dict, word_vectors):
-    """
-    Evaluates word similarity on the MEN dataset using generated word vectors.
-
-    Args:
-    men_file (str): Path to the MEN dataset (TSV file).
-    vocab_v_dict (dict): Dictionary of target vocabulary (V) with word indices.
-    vocab_vc_dict (dict): Dictionary of context vocabulary (VC) with word indices.
-    word_vectors (numpy array): 2D array where each row is a word vector.
-
-    Returns:
-    int: spearman's similarity scores.
-    """
-
     human_scores = []
     model_scores = []
 
     with open(files, 'r') as file:
         for line in file:
-            # Split the line by tabs (TSV format)
             word1, word2, human_score = line.strip().split('\t')
             human_score = float(human_score)
 
-            # Get the word indices for both word1 and word2
             idx1 = vocab_v_dict.get(word1)
             idx2 = vocab_v_dict.get(word2)
 
@@ -59,12 +34,9 @@ def EvalWS(files, vocab_v_dict, word_vectors):
                 # If either word is not found, set similarity to 0.0
                 model_similarity = 0.0
 
-            # Print the word pair, human score, and model-computed similarity
-            # print(f"Word Pair: ({word1},{word2}) | Human Score: {human_score} | Model Similarity: {model_similarity:.4f}")
             human_scores.append(human_score)
             model_scores.append(model_similarity)
 
-        # Compute Spearman's rank correlation between human and model scores
         spearman_corr, _ = spearmanr(human_scores, model_scores)
 
         print(f"Spearman's Rank Correlation: {spearman_corr:.4f}")

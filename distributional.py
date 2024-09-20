@@ -20,8 +20,13 @@ vocab_v_dict = {word: idx for idx, word in enumerate(v_list)}
 vocab_vc_dict = {word: idx for idx, word in enumerate(vc_list)}
 
 # Initialize the co-occurrence matrix of size len(V) x len(VC)
-co_occurrence_matrix_3 = [[0] * len(vc_list) for _ in range(len(v_list))]
-co_occurrence_matrix_6 = [[0] * len(vc_list) for _ in range(len(v_list))]
+count_matrix = [[0] * len(vc_list) for _ in range(len(v_list))]
+count_matrix_3 = [[0] * len(vc_list) for _ in range(len(v_list))]
+count_matrix_6 = [[0] * len(vc_list) for _ in range(len(v_list))]
+
+count_matrix_ = [[0] * len(v_list) for _ in range(len(v_list))]
+count_matrix_3_ = [[0] * len(v_list) for _ in range(len(v_list))]
+count_matrix_6_ = [[0] * len(v_list) for _ in range(len(v_list))]
 
 
 def update_co_occurrence_matrix(corpus_file, vocab_v_dict, vocab_vc_dict, co_occurrence_matrix, window_size):
@@ -47,31 +52,36 @@ def update_co_occurrence_matrix(corpus_file, vocab_v_dict, vocab_vc_dict, co_occ
 
 
 corpus_file = 'data/wiki-1percent.txt'
-update_co_occurrence_matrix(corpus_file, vocab_v_dict, vocab_vc_dict, co_occurrence_matrix_3, window_size=3)
-update_co_occurrence_matrix(corpus_file, vocab_v_dict, vocab_vc_dict, co_occurrence_matrix_6, window_size=6)
+update_co_occurrence_matrix(corpus_file, vocab_v_dict, vocab_vc_dict, count_matrix, window_size=1)
+update_co_occurrence_matrix(corpus_file, vocab_v_dict, vocab_vc_dict, count_matrix_3, window_size=3)
+update_co_occurrence_matrix(corpus_file, vocab_v_dict, vocab_vc_dict, count_matrix_6, window_size=6)
+
+update_co_occurrence_matrix(corpus_file, vocab_v_dict, vocab_v_dict, count_matrix_, window_size=1)
+update_co_occurrence_matrix(corpus_file, vocab_v_dict, vocab_v_dict, count_matrix_3_, window_size=3)
+update_co_occurrence_matrix(corpus_file, vocab_v_dict, vocab_v_dict, count_matrix_6_, window_size=6)
 
 print("word pair\t\tw=3\tw=6")
 print("(chicken, the)\t\t",
-      co_occurrence_matrix_3[vocab_v_dict['chicken']][vocab_vc_dict['the']], "\t",
-      co_occurrence_matrix_6[vocab_v_dict['chicken']][vocab_vc_dict['the']]
+      count_matrix_3[vocab_v_dict['chicken']][vocab_vc_dict['the']], "\t",
+      count_matrix_6[vocab_v_dict['chicken']][vocab_vc_dict['the']]
       )
 print("(chicken, wings)\t",
-      co_occurrence_matrix_3[vocab_v_dict['chicken']][vocab_vc_dict['wings']], "\t",
-      co_occurrence_matrix_6[vocab_v_dict['chicken']][vocab_vc_dict['wings']]
+      count_matrix_3[vocab_v_dict['chicken']][vocab_vc_dict['wings']], "\t",
+      count_matrix_6[vocab_v_dict['chicken']][vocab_vc_dict['wings']]
       )
 print("(chicago, chicago)\t",
-      co_occurrence_matrix_3[vocab_v_dict['chicago']][vocab_vc_dict['chicago']], "\t",
-      co_occurrence_matrix_6[vocab_v_dict['chicago']][vocab_vc_dict['chicago']]
+      count_matrix_3[vocab_v_dict['chicago']][vocab_vc_dict['chicago']], "\t",
+      count_matrix_6[vocab_v_dict['chicago']][vocab_vc_dict['chicago']]
       )
 print("(coffee, the)\t\t",
-      co_occurrence_matrix_3[vocab_v_dict['coffee']][vocab_vc_dict['the']], "\t",
-      co_occurrence_matrix_6[vocab_v_dict['coffee']][vocab_vc_dict['the']]
+      count_matrix_3[vocab_v_dict['coffee']][vocab_vc_dict['the']], "\t",
+      count_matrix_6[vocab_v_dict['coffee']][vocab_vc_dict['the']]
       )
 print("(coffee, cup)\t\t",
-      co_occurrence_matrix_3[vocab_v_dict['coffee']][vocab_vc_dict['cup']], "\t",
-      co_occurrence_matrix_6[vocab_v_dict['coffee']][vocab_vc_dict['cup']]
+      count_matrix_3[vocab_v_dict['coffee']][vocab_vc_dict['cup']], "\t",
+      count_matrix_6[vocab_v_dict['coffee']][vocab_vc_dict['cup']]
       )
 print("(coffee, coffee)\t",
-      co_occurrence_matrix_3[vocab_v_dict['coffee']][vocab_vc_dict['coffee']], "\t",
-      co_occurrence_matrix_6[vocab_v_dict['coffee']][vocab_vc_dict['coffee']]
+      count_matrix_3[vocab_v_dict['coffee']][vocab_vc_dict['coffee']], "\t",
+      count_matrix_6[vocab_v_dict['coffee']][vocab_vc_dict['coffee']]
       )

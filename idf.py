@@ -2,7 +2,13 @@ from distributional import vocab_v_dict, vocab_vc_dict
 from collections import defaultdict
 
 corpus_file = 'data/wiki-1percent.txt'
-co_occurrence_matrix = [[0] * len(vocab_vc_dict) for _ in range(len(vocab_v_dict))]
+idf_matrix = [[0] * len(vocab_vc_dict) for _ in range(len(vocab_v_dict))]
+idf_matrix_3 = [[0] * len(vocab_vc_dict) for _ in range(len(vocab_v_dict))]
+idf_matrix_6 = [[0] * len(vocab_vc_dict) for _ in range(len(vocab_v_dict))]
+
+idf_matrix_ = [[0] * len(vocab_v_dict) for _ in range(len(vocab_v_dict))]
+idf_matrix_3_ = [[0] * len(vocab_v_dict) for _ in range(len(vocab_v_dict))]
+idf_matrix_6_ = [[0] * len(vocab_v_dict) for _ in range(len(vocab_v_dict))]
 
 def compute_idf_factor(corpus_file, vocab_vc_dict):
     word_in_sentence_count = defaultdict(int)
@@ -49,4 +55,10 @@ def idf(corpus_file, vocab_v_dict, vocab_vc_dict, co_occurrence_matrix, window_s
 
 
 # Update the co-occurrence matrix using IDF
-idf(corpus_file, vocab_v_dict, vocab_vc_dict, co_occurrence_matrix, 3)
+idf(corpus_file, vocab_v_dict, vocab_vc_dict, idf_matrix, 1)
+idf(corpus_file, vocab_v_dict, vocab_vc_dict, idf_matrix_3, 3)
+idf(corpus_file, vocab_v_dict, vocab_vc_dict, idf_matrix_6, 6)
+
+idf(corpus_file, vocab_v_dict, vocab_v_dict, idf_matrix_, 1)
+idf(corpus_file, vocab_v_dict, vocab_v_dict, idf_matrix_3_, 3)
+idf(corpus_file, vocab_v_dict, vocab_v_dict, idf_matrix_6_, 6)

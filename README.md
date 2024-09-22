@@ -4,6 +4,8 @@ In this project, different methods for building word vectors were implemented us
 
 The evaluation of the word vectors was conducted by comparing the cosine similarity between word pairs to manually annotated similarity scores in the provided MEN and SimLex-999 datasets. **Spearman’s rank correlation** coefficient was used as the evaluation metric to measure the alignment between the computed word vector similarities and human-annotated scores. The analysis explored the effect of varying context window sizes and vocabulary on word vector performance. Additionally, words with multiple senses were examined to assess how the constructed vectors capture different meanings.
 
+The [files](https://github.com/RakeshJV2000/word-vectors/tree/main/files) folder has the data with word pairs and their similarities which were used to calculate the Spearman's correlation.
+
 ## Distributional Counting
 
 Distributional counting quantifies how often words co-occur within specific contextual windows in a given corpus. The basic idea is that words that appear in similar contexts tend to have similar meanings. In this context, the task involves counting how many times a context word 𝑦 appears within a context window of size 𝑤, centered around a target word 𝑥, using a sample corpus.

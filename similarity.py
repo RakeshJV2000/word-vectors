@@ -13,6 +13,10 @@ nlp = spacy.load('en_core_web_sm')
 men_file = 'data/men.txt'
 sim_file = "data/simlex-999.txt"
 
+def get_pos_tag(word):
+    doc = nlp(word)
+    return doc[0].pos_
+
 def cosine_similarity(vec1, vec2):
     if norm(vec1) == 0 or norm(vec2) == 0:
         return 0.0
@@ -23,6 +27,7 @@ def EvalWS(files, vocab_v_dict, word_vectors):
     model_scores = []
 
     with open(files, 'r') as file:
+        next(file)
         for line in file:
             word1, word2, human_score = line.strip().split('\t')
             human_score = float(human_score)
@@ -46,6 +51,57 @@ def EvalWS(files, vocab_v_dict, word_vectors):
 
         # print(f"Spearman's Rank Correlation: {spearman_corr:.4f}")
         return float(f"{spearman_corr:.4f}")
+
+
+def find_nearest_neighbors(query_word, vocab_v_dict, pmi_matrix, k=10):
+    if query_word not in vocab_v_dict:
+        print(f"Query word '{query_word}' not found in vocabulary.")
+        return []
+
+    query_idx = vocab_v_dict[query_word]
+    query_vector = pmi_matrix[query_idx]
+
+    similarities = []
+    for word, idx in vocab_v_dict.items():
+        if word != query_word:  # Omit the query word itself
+            similarity = cosine_similarity(query_vector, pmi_matrix[idx])
+            similarities.append((word, similarity))
+
+    similarities.sort(key=lambda x: x[1], reverse=True)
+    return similarities[:k]
+
+
+def find_nearest_neighbors_with_pos(query_word, vocab_v_dict, pmi_matrix, k=5):
+    query_idx = vocab_v_dict[query_word]
+    query_vector = pmi_matrix[query_idx]
+
+    similarities = []
+    for word, idx in vocab_v_dict.items():
+        if word != query_word:
+            similarity = cosine_similarity(query_vector, pmi_matrix[idx])
+            similarities.append((word, similarity, get_pos_tag(word)))
+
+    similarities.sort(key=lambda x: x[1], reverse=True)
+    return similarities[:k]
+
+
+def analyze_nearest_neighbors(query_word, vocab_v_dict, pmi_matrix_, pmi_matrix_6_):
+    query_pos = get_pos_tag(query_word)
+
+    print(f"Query word: '{query_word}' (POS: {query_pos})")
+
+    # For window size w=1
+    print(f"\nNearest neighbors for '{query_word}' with window size w=1:")
+    neighbors_w1 = find_nearest_neighbors_with_pos(query_word, vocab_v_dict, pmi_matrix_)
+    for word, sim, pos in neighbors_w1:
+        print(f"Neighbor: {word}, Cosine Similarity: {sim:.4f}, POS: {pos}")
+
+    # For window size w=6
+    print(f"\nNearest neighbors for '{query_word}' with window size w=6:")
+    neighbors_w6 = find_nearest_neighbors_with_pos(query_word, vocab_v_dict, pmi_matrix_6_)
+    for word, sim, pos in neighbors_w6:
+        print(f"Neighbor: {word}, Cosine Similarity: {sim:.4f}, POS: {pos}")
+
 
 print("\nEvalWS for Distributional counting with w=3")
 x = EvalWS(men_file, vocab_v_dict, count_matrix_3)
@@ -111,23 +167,6 @@ print("SIMlex file\t",EvalWS(sim_file, vocab_v_dict, pmi_matrix_),
       "\t",EvalWS(sim_file, vocab_v_dict, pmi_matrix_6_))
 
 
-def find_nearest_neighbors(query_word, vocab_v_dict, pmi_matrix, k=10):
-    if query_word not in vocab_v_dict:
-        print(f"Query word '{query_word}' not found in vocabulary.")
-        return []
-
-    query_idx = vocab_v_dict[query_word]
-    query_vector = pmi_matrix[query_idx]
-
-    similarities = []
-    for word, idx in vocab_v_dict.items():
-        if word != query_word:  # Omit the query word itself
-            similarity = cosine_similarity(query_vector, pmi_matrix[idx])
-            similarities.append((word, similarity))
-
-    similarities.sort(key=lambda x: x[1], reverse=True)
-    return similarities[:k]
-
 query_word = 'judges'
 print(f"\n10 nearest neighbors for '{query_word}' with window size w = 1:")
 neighbors_w1 = find_nearest_neighbors(query_word, vocab_v_dict, pmi_matrix_)
@@ -138,41 +177,6 @@ print(f"\n10 nearest neighbors for '{query_word}' with window size w = 6:")
 neighbors_w6 = find_nearest_neighbors(query_word, vocab_v_dict, pmi_matrix_6_)
 for word, sim in neighbors_w6:
     print(f"Word: {word}, Cosine Similarity: {sim:.4f}")
-
-def get_pos_tag(word):
-    doc = nlp(word)
-    return doc[0].pos_
-
-def find_nearest_neighbors_with_pos(query_word, vocab_v_dict, pmi_matrix, k=5):
-    query_idx = vocab_v_dict[query_word]
-    query_vector = pmi_matrix[query_idx]
-
-    similarities = []
-    for word, idx in vocab_v_dict.items():
-        if word != query_word:
-            similarity = cosine_similarity(query_vector, pmi_matrix[idx])
-            similarities.append((word, similarity, get_pos_tag(word)))
-
-    similarities.sort(key=lambda x: x[1], reverse=True)
-    return similarities[:k]
-
-
-def analyze_nearest_neighbors(query_word, vocab_v_dict, pmi_matrix_, pmi_matrix_6_):
-    query_pos = get_pos_tag(query_word)
-
-    print(f"Query word: '{query_word}' (POS: {query_pos})")
-
-    # For window size w=1
-    print(f"\nNearest neighbors for '{query_word}' with window size w=1:")
-    neighbors_w1 = find_nearest_neighbors_with_pos(query_word, vocab_v_dict, pmi_matrix_)
-    for word, sim, pos in neighbors_w1:
-        print(f"Neighbor: {word}, Cosine Similarity: {sim:.4f}, POS: {pos}")
-
-    # For window size w=6
-    print(f"\nNearest neighbors for '{query_word}' with window size w=6:")
-    neighbors_w6 = find_nearest_neighbors_with_pos(query_word, vocab_v_dict, pmi_matrix_6_)
-    for word, sim, pos in neighbors_w6:
-        print(f"Neighbor: {word}, Cosine Similarity: {sim:.4f}, POS: {pos}")
 
 
 query_words = ['produced', 'short', 'in']
@@ -195,5 +199,4 @@ for query_word in multi_sense_words:
     analyze_nearest_neighbors(query_word, vocab_v_dict, pmi_matrix_, pmi_matrix_6_)
 
 end_time = time.time()
-tot = (end_time - start_time)/60
 print(f"\nNo of minutes taken to execute :{((end_time - start_time)/60):.2f}")

@@ -1,4 +1,4 @@
-# word-vectors
+# Implementing word-vectors
 
 In this project, different methods for building word vectors were implemented using a Wikipedia corpus. A vocabulary 𝑉 and a context vocabulary 𝑉𝐶 were defined to calculate word vectors. Word co-occurrences within a specified context window size were counted, and word vectors were constructed based on these co-occurrence counts. Various techniques, including **Distributional Counts**, **TF-IDF**, and **Pointwise Mutual Information (PMI)**, were employed to compute the word vectors.
 
